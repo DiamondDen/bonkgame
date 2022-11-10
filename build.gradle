@@ -1,0 +1,55 @@
+plugins {
+    id 'java'
+}
+
+group 'org.example'
+version '1.0-SNAPSHOT'
+
+test {
+    useJUnitPlatform()
+}
+
+project.ext.lwjglVersion = "3.3.1"
+
+repositories {
+    mavenCentral()
+}
+
+jar {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
+
+dependencies {
+    annotationProcessor 'org.projectlombok:lombok:1.18.20'
+    compileOnly 'org.projectlombok:lombok:1.18.20'
+
+    implementation 'it.unimi.dsi:fastutil-core:8.5.9'
+
+    // https://mvnrepository.com/artifact/com.google.code.gson/gson
+    implementation 'com.google.code.gson:gson:2.10'
+
+// https://mvnrepository.com/artifact/io.netty/netty-all
+    implementation 'io.netty:netty-all:4.1.84.Final'
+
+    implementation platform("org.lwjgl:lwjgl-bom:$lwjglVersion")
+
+    implementation "org.lwjgl:lwjgl"
+    implementation "org.lwjgl:lwjgl-assimp"
+    implementation "org.lwjgl:lwjgl-glfw"
+    implementation "org.lwjgl:lwjgl-openal"
+    implementation "org.lwjgl:lwjgl-opengl"
+    implementation "org.lwjgl:lwjgl-stb"
+
+    for (natives in ['natives-linux', 'natives-macos-arm64', 'natives-windows']) {
+        runtimeOnly "org.lwjgl:lwjgl::$natives"
+        runtimeOnly "org.lwjgl:lwjgl-assimp::$natives"
+        runtimeOnly "org.lwjgl:lwjgl-glfw::$natives"
+        runtimeOnly "org.lwjgl:lwjgl-openal::$natives"
+        runtimeOnly "org.lwjgl:lwjgl-opengl::$natives"
+        runtimeOnly "org.lwjgl:lwjgl-stb::$natives"
+    }
+}
