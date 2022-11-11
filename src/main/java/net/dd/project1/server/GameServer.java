@@ -16,7 +16,9 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 public class GameServer {
-  
+
+  private static final boolean TCP = "TCP".equals(System.getenv("PROTOCOL"));
+
   private final NetworkServer networkServer;
   private final GamePacketManager packetManager;
   private final ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor(runnable -> {
@@ -34,8 +36,10 @@ public class GameServer {
 
     ServerConnectionHandler connectionHandler = new ServerConnectionHandler(this, this.packetManager);
 
-    this.networkServer = new UdpNettyServer(connectionHandler);
-    //this.networkServer = new TcpNettyServer(connectionHandler);
+    if (TCP)
+      this.networkServer = new TcpNettyServer(connectionHandler);
+    else
+      this.networkServer = new UdpNettyServer(connectionHandler);
   }
 
   public Collection<NetworkClient> getOnlinePlayers() {
@@ -50,7 +54,7 @@ public class GameServer {
   public void newConnection(NetworkClient client) {
     this.onlinePlayerMap.put(client.getUuid(), client);
   }
-  
+
   private void removeConnection(NetworkClient client) {
     this.onlinePlayerMap.remove(client.getUuid());
     // из списка удаляет в tick

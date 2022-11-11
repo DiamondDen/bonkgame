@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import net.dd.project1.client.game.Game;
 import net.dd.project1.client.game.network.client.connection.ClientConnectionHandler;
+import net.dd.project1.client.game.network.client.impl.TcpNettyClient;
 import net.dd.project1.client.game.network.client.impl.udp.UdpNettyClient;
 import net.dd.project1.shared.network.GamePacketManager;
 import net.dd.project1.shared.network.Packet;
@@ -23,6 +24,8 @@ import java.util.UUID;
 @Getter
 @RequiredArgsConstructor
 public class NetworkManager extends SimpleChannelInboundHandler<Packet> {
+
+  private static final boolean TCP = "TCP".equals(System.getenv("PROTOCOL"));
 
   private final Game game;
 
@@ -45,8 +48,10 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet> {
 
     ClientConnectionHandler connectionHandler = new ClientConnectionHandler(this, this.packetManager);
 
-    this.networkConnection = new UdpNettyClient(connectionHandler);
-    //this.networkConnection = new TcpNetwork(connectionHandler);
+    if (TCP)
+      this.networkConnection = new TcpNettyClient(connectionHandler);
+    else
+      this.networkConnection = new UdpNettyClient(connectionHandler);
   }
 
   public void close() {
