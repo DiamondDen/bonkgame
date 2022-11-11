@@ -19,7 +19,11 @@ public class GameServer {
   
   private final NetworkServer networkServer;
   private final GamePacketManager packetManager;
-  private final ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor();
+  private final ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor(runnable -> {
+    Thread thread = new Thread(runnable, "Server Thread");
+    thread.setDaemon(true);
+    return thread;
+  });
 
   private final List<NetworkClient> clientList = Collections.synchronizedList(new ArrayList<>());
   private final Map<UUID, NetworkClient> onlinePlayerMap = new HashMap<>();
