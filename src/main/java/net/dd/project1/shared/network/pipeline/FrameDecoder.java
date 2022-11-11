@@ -6,12 +6,12 @@ import io.netty.handler.codec.ByteToMessageDecoder;
 
 import java.util.List;
 
-public class FrameDecoder  extends ByteToMessageDecoder {
+public class FrameDecoder extends ByteToMessageDecoder {
 
   protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) {
     if (!ctx.channel().isActive()) {
       in.clear();
-    } else {
+    } else if (in.isReadable(4)) {
       in.markReaderIndex();
       int length = in.readInt();
       if (in.isReadable(length)) {
