@@ -88,11 +88,14 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet> {
   }
 
   public void sendPacket(Packet message) {
+    if (!this.channel.isActive()) return;
+
     EventLoop eventLoop = this.channel.eventLoop();
     if (eventLoop.inEventLoop()) {
       this.channel.writeAndFlush(message);
     } else {
       eventLoop.execute(() -> {
+        if (!this.channel.isActive()) return;
         this.channel.writeAndFlush(message);
       });
     }
