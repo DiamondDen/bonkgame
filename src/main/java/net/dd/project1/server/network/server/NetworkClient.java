@@ -14,6 +14,7 @@ import net.dd.project1.server.world.RemotePlayer;
 import net.dd.project1.shared.network.Packet;
 import net.dd.project1.shared.network.handler.PacketHandler;
 import net.dd.project1.shared.network.packets.KeepAlive;
+import net.dd.project1.shared.network.packets.QuitPacket;
 
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -73,6 +74,10 @@ public class NetworkClient extends SimpleChannelInboundHandler<Packet> {
   protected void channelRead0(ChannelHandlerContext ctx, Packet msg) throws Exception {
     if (msg instanceof KeepAlive) {
       this.player.setPing(System.currentTimeMillis() - ((KeepAlive) msg).getTime());
+      return;
+    }
+    if (msg instanceof QuitPacket) {
+      ctx.close();
       return;
     }
 
