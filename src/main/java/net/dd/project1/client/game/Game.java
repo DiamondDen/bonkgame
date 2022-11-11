@@ -16,7 +16,11 @@ import java.util.concurrent.TimeUnit;
 @Getter
 public abstract class Game {
 
-  protected final ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor();
+  protected final ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor(runnable -> {
+    Thread thread = new Thread(runnable, "Client Thread");
+    thread.setDaemon(true);
+    return thread;
+  });
 
   protected final GameDisplay gameDisplay;
 
