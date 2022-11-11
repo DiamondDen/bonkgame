@@ -46,7 +46,7 @@ public abstract class Game {
   }
 
   public void startTimer() {
-    this.service.scheduleWithFixedDelay(() -> {
+    this.service.scheduleAtFixedRate(() -> {
       try {
         this.tick();
       } catch (Exception e) {
