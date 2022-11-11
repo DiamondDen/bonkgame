@@ -24,6 +24,8 @@ public class MultiPlayGame extends Game {
 
     this.startTimer();
     this.start();
+
+    this.networkManager.close();
   }
 
   @Override

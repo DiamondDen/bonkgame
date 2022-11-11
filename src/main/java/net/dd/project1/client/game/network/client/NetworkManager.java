@@ -15,6 +15,7 @@ import net.dd.project1.shared.network.Packet;
 import net.dd.project1.shared.network.handler.PacketHandler;
 import net.dd.project1.shared.network.packets.KeepAlive;
 import net.dd.project1.shared.network.packets.LoginPacket;
+import net.dd.project1.shared.network.packets.QuitPacket;
 
 import java.util.Random;
 import java.util.UUID;
@@ -46,6 +47,12 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet> {
 
     this.networkConnection = new UdpNettyClient(connectionHandler);
     //this.networkConnection = new TcpNetwork(connectionHandler);
+  }
+
+  public void close() {
+    this.sendPacket(new QuitPacket(0), () -> {
+      this.channel.close();
+    });
   }
 
   public void update() {
@@ -87,6 +94,21 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet> {
     } else {
       eventLoop.execute(() -> {
         this.channel.writeAndFlush(message);
+      });
+    }
+  }
+
+  public void sendPacket(Packet message, Runnable callback) {
+    EventLoop eventLoop = this.channel.eventLoop();
+    if (eventLoop.inEventLoop()) {
+      this.channel.writeAndFlush(message).addListener(future -> {
+        callback.run();
+      });
+    } else {
+      eventLoop.execute(() -> {
+        this.channel.writeAndFlush(message).addListener(future -> {
+          callback.run();
+        });
       });
     }
   }

@@ -1,6 +1,7 @@
 package net.dd.project1.client.game.network.client.impl.udp;
 
 import io.netty.bootstrap.Bootstrap;
+import io.netty.channel.Channel;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.epoll.Epoll;
@@ -30,7 +31,10 @@ public class UdpNettyClient implements NetworkClient {
             .option(ChannelOption.SO_REUSEADDR, true)
             .handler(this.connectionHandler);
     try {
-      bootstrap.connect(new InetSocketAddress(host, port)).sync();
+      Channel channel = bootstrap.connect(new InetSocketAddress(host, port)).sync().channel();
+      channel.closeFuture().addListener(future -> {
+        workGroup.shutdownGracefully();
+      });
     } catch (Exception e) {
       e.printStackTrace();
     }
