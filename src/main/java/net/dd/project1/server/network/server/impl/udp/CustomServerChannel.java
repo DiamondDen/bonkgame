@@ -7,10 +7,9 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ServerChannel;
 import io.netty.channel.socket.DatagramChannel;
 import io.netty.channel.socket.DatagramPacket;
-import lombok.val;
+import net.dd.project1.shared.network.udp.DatagramChannelProxy;
 
 import java.net.InetSocketAddress;
-import java.net.InterfaceAddress;
 import java.net.SocketAddress;
 import java.util.HashMap;
 import java.util.Map;
@@ -49,11 +48,16 @@ public class CustomServerChannel extends DatagramChannelProxy implements ServerC
   }
 
   public void fireContent(Channel channel, DatagramPacket datagramPacket) {
-    channel.eventLoop().execute(() ->
-            channel.pipeline()
-                    .fireChannelRead(datagramPacket.content().retain())
-                    .fireChannelReadComplete()
-    );
+    channel.eventLoop().execute(() -> {
+      ByteBuf byteBuf = datagramPacket.content();
+      try {
+        channel.pipeline()
+                .fireChannelRead(byteBuf.retain())
+                .fireChannelReadComplete();
+      } finally {
+        byteBuf.release();
+      }
+    });
   }
 
   public void addDefaultPipeline() {
@@ -65,7 +69,7 @@ public class CustomServerChannel extends DatagramChannelProxy implements ServerC
           final DatagramPacket datagram = (DatagramPacket) msg;
           try {
             Channel child = getOrCreateNewChild(datagram.sender());
-            fireContent(child, datagram);
+            fireContent(child, datagram.retain());
           } finally {
             datagram.release();
           }
@@ -75,4 +79,6 @@ public class CustomServerChannel extends DatagramChannelProxy implements ServerC
       }
     });
   }
+
+
 }

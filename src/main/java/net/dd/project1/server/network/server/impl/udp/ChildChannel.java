@@ -11,14 +11,13 @@ import java.nio.channels.ClosedChannelException;
 public class ChildChannel extends AbstractChannel {
 
   private static final ChannelMetadata metadata = new ChannelMetadata(false);
-  protected final ChannelPromise connectPromise;
   protected final InetSocketAddress remoteAddress;
   protected volatile boolean open = true;
 
   public ChildChannel(Channel parent, InetSocketAddress remoteAddress) {
     super(parent);
-    connectPromise = newPromise();
     this.remoteAddress = remoteAddress;
+    pipeline().addLast(new WriteHandler());
   }
 
 
@@ -83,7 +82,7 @@ public class ChildChannel extends AbstractChannel {
 
   @Override
   public boolean isActive() {
-    return isOpen() && parent().isActive() && connectPromise.isSuccess();
+    return isOpen() && parent().isActive();
   }
 
   @Override

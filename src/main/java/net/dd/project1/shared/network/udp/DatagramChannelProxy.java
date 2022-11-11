@@ -1,4 +1,4 @@
-package net.dd.project1.server.network.server.impl.udp;
+package net.dd.project1.shared.network.udp;
 
 import io.netty.buffer.ByteBufAllocator;
 import io.netty.channel.*;
@@ -22,6 +22,18 @@ public class DatagramChannelProxy implements Channel {
     this.listener = ioChannelSupplier.get();
     this.pipeline = this.newChannelPipeline();
 
+  }
+
+  protected ChannelPromise wrapPromise(ChannelPromise in) {
+    final ChannelPromise out = listener.newPromise();
+    out.addListener(res -> {
+      if (res.isSuccess()) {
+        in.trySuccess();
+      } else {
+        in.tryFailure(res.cause());
+      }
+    });
+    return out;
   }
 
   protected DefaultChannelPipeline newChannelPipeline() {

@@ -4,6 +4,8 @@ import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.EventLoop;
 import io.netty.channel.SimpleChannelInboundHandler;
+import io.netty.handler.timeout.ReadTimeoutException;
+import io.netty.handler.timeout.ReadTimeoutHandler;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -75,6 +77,14 @@ public class NetworkClient extends SimpleChannelInboundHandler<Packet> {
     }
 
     msg.handle(this.packetHandler);
+  }
+
+  @Override
+  public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+    if (!(cause instanceof ReadTimeoutException)) {
+      cause.printStackTrace();
+    }
+    ctx.close();
   }
 
   @Override

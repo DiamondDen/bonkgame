@@ -13,7 +13,7 @@ import net.dd.project1.client.game.network.client.NetworkClient;
 import net.dd.project1.client.game.network.client.connection.ClientConnectionHandler;
 
 @RequiredArgsConstructor
-public class TcpNetworkClient implements NetworkClient {
+public class TcpNettyClient implements NetworkClient {
 
   private final ClientConnectionHandler connectionHandler;
   @Override

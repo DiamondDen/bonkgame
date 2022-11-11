@@ -25,6 +25,7 @@ public class UdpNettyServer implements NetworkServer {
       bootstrap.group(oneGroup);
       bootstrap.channelFactory(() -> new CustomServerChannel(Epoll.isAvailable() ? EpollDatagramChannel::new : NioDatagramChannel::new));
       bootstrap.childHandler(this.connectionHandler);
+      System.out.println("Starting server on " + port);
       bootstrap.bind(port).sync();
     } catch (Exception e) {
       e.printStackTrace();
