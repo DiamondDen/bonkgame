@@ -1,14 +1,19 @@
 package net.dd.project1.client.game.world;
 
+import net.dd.project1.client.game.math.Vector2f;
+
 import java.util.List;
 
 public class WorldRemotePlayer extends WorldPlayer {
+
+  public static final boolean INTERPOLATION = true;
 
   private long lastUpdatePositionMs;
   private long updateLatencyMs;
 
   private int prevX, prevY;
   private int nextX, nextY;
+  private long moveSequenceNumber;
 
   public WorldRemotePlayer(int x, int y, int size) {
     super(x, y, size);
@@ -16,13 +21,17 @@ public class WorldRemotePlayer extends WorldPlayer {
     this.prevX = x;
     this.prevY = y;
 
-    this.updatePosition(x, y);
+    this.updatePosition(x, y, moveSequenceNumber, Vector2f.NUL);
   }
 
-  public boolean interpolation = true;
 
-  public void updatePosition(int x, int y) {
-    if (!interpolation) {
+  public void updatePosition(int x, int y, long sequenceNumber, Vector2f motion) {
+    if (this.moveSequenceNumber > sequenceNumber) {
+      return;
+    }
+    this.moveSequenceNumber = sequenceNumber;
+
+    if (!INTERPOLATION) {
       this.x = x;
       this.y = y;
       return;
@@ -49,7 +58,7 @@ public class WorldRemotePlayer extends WorldPlayer {
     long leftTimeMs = nowMs - this.lastUpdatePositionMs;
     double progress = Math.min(1, leftTimeMs / (double) this.updateLatencyMs);
 
-    if (this.interpolation) {
+    if (INTERPOLATION) {
       this.x = (int) (this.prevX + (this.nextX - this.prevX) * progress);
       this.y = (int) (this.prevY + (this.nextY - this.prevY) * progress);
     }

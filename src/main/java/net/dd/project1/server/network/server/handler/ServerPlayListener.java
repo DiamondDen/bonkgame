@@ -55,8 +55,13 @@ public class ServerPlayListener extends PlayPacketHandler {
 
   @Override
   public void handleMove(MovePacket movePacket) {
+    // Защита от разного порядка в пакетах
+    if (this.player.getMoveSequenceNumber() > movePacket.getSequenceNumber())
+      return;
+
     this.player.updatePosition(movePacket.getX(), movePacket.getY());
     this.player.setMotion(movePacket.getMotion());
+    this.player.setMoveSequenceNumber(movePacket.getSequenceNumber());
   }
 
   @Override

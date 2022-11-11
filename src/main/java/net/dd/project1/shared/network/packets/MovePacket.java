@@ -17,6 +17,7 @@ public class MovePacket implements Packet {
 
   private int id;
   private final int x, y;
+  private final long sequenceNumber;
   private final Vector2f motion;
 
   @Override

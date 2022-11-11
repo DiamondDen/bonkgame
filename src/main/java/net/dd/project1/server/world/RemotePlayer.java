@@ -23,11 +23,12 @@ public class RemotePlayer {
   private int lastX, lastY;
   private int x, y;
   private Vector2f motion;
+  private long moveSequenceNumber;
 
   public void tick() {
     if (this.x != this.lastX || this.y != this.lastY) {
       this.gameServer.broadcast(this.networkClient, new MovePacket(
-              this.id, this.x, this.y, this.motion
+              this.id, this.x, this.y, this.moveSequenceNumber, this.motion
       ));
 
       this.lastX = this.x;

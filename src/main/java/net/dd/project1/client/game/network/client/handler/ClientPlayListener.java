@@ -48,7 +48,10 @@ public class ClientPlayListener extends PlayPacketHandler {
   public void handleMove(MovePacket movePacket) {
     WorldRemotePlayer worldPlayer = this.playersMap.get(movePacket.getId());
     if (worldPlayer != null) {
-      worldPlayer.updatePosition(movePacket.getX(), movePacket.getY());
+      worldPlayer.updatePosition(
+              movePacket.getX(), movePacket.getY(),
+              movePacket.getSequenceNumber(), movePacket.getMotion()
+      );
     }
   }
 }

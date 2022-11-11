@@ -17,13 +17,14 @@ public class MultiPlayerController extends SinglePlayerController {
   }
 
   private int lastX, lastY;
+  private long sequenceNumber;
 
   @Override
   public void tick(List<WorldObject> elementList) {
     super.tick(elementList);
 
     if (this.lastX != this.x || this.lastY != this.y) {
-      this.networkManager.sendPacket(new MovePacket(this.x, this.y, this.motion));
+      this.networkManager.sendPacket(new MovePacket(this.x, this.y, this.sequenceNumber++, this.motion));
       this.lastX = this.x;
       this.lastY = this.y;
     }
