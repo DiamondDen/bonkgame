@@ -5,13 +5,12 @@ import lombok.Setter;
 import net.dd.project1.client.display.DrawHelper;
 import net.dd.project1.client.display.KeyHandler;
 import net.dd.project1.client.display.MouseHandler;
-import net.dd.project1.client.display.Render;
+import net.dd.project1.client.game.Game;
 import org.lwjgl.glfw.*;
 import org.lwjgl.opengl.*;
 import org.lwjgl.system.*;
 
 import java.nio.*;
-import java.util.Collection;
 
 import static org.lwjgl.glfw.Callbacks.*;
 import static org.lwjgl.glfw.GLFW.*;
@@ -25,7 +24,7 @@ public class GameDisplay {
   // The window handle
   private long window;
 
-  private final Collection<? extends Render> renders;
+  private final Game game;
   private final String title;
   @Setter
   private KeyHandler keyHandler;
@@ -176,11 +175,10 @@ public class GameDisplay {
 
       // move to origin
       glTranslated(-1, 1, 0);
-      glScaled(deltaX, -deltaY, 1);
+      glScaled(deltaX, deltaY, 1);
+      glTranslated(0, -this.getHeight(), 0);
 
-      for (Render render : renders) {
-        render.draw(drawHelper);
-      }
+      this.game.render(drawHelper);
 
       glPopMatrix();
 

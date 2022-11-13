@@ -33,7 +33,7 @@ public class ClientPlayListener extends PlayPacketHandler {
     WorldRemotePlayer worldPlayer = new WorldRemotePlayer(joinPacket.getX(), joinPacket.getY(), 50);
 
     this.playersMap.put(joinPacket.getId(), worldPlayer);
-    this.game.addWorldObject(worldPlayer);
+    this.game.getWorld().addWorldObject(worldPlayer);
   }
 
   @Override

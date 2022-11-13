@@ -15,12 +15,13 @@ public class MultiPlayGame extends Game {
     this.networkManager.setHandler(new ClientLoginListener(this.networkManager));
     this.networkManager.connect(host, port);
 
-    this.worldObjectList.add(new WorldObject(0, this.gameDisplay.getHeight() - 20, this.gameDisplay.getWidth(), 20));
-    this.worldObjectList.add(new WorldObject(0, 0, 20, this.gameDisplay.getHeight()));
-    this.worldObjectList.add(new WorldObject(this.gameDisplay.getWidth() - 20, 0, 20, this.gameDisplay.getHeight()));
-    this.worldObjectList.add(new WorldObject(0, 0, this.gameDisplay.getWidth(), 20));
 
-    this.worldObjectList.add(new MultiPlayerController(this, this.networkManager, 200, 200, 50));
+    this.getWorld().addWorldObject(new WorldObject(0, this.gameDisplay.getHeight() - 20, this.gameDisplay.getWidth(), 20));
+    this.getWorld().addWorldObject(new WorldObject(0, 0, 20, this.gameDisplay.getHeight()));
+    this.getWorld().addWorldObject(new WorldObject(this.gameDisplay.getWidth() - 20, 0, 20, this.gameDisplay.getHeight()));
+    this.getWorld().addWorldObject(new WorldObject(0, 0, this.gameDisplay.getWidth(), 20));
+
+    this.getWorld().addWorldObject(new MultiPlayerController(this, this.networkManager, 200, 200, 50));
 
     this.startTimer();
     this.start();

@@ -12,6 +12,16 @@ public class Vector2f {
   @Getter
   public float x, y;
 
+  public Vector2f setX(float x) {
+    this.x = x;
+    return this;
+  }
+
+  public Vector2f setY(float y) {
+    this.y = y;
+    return this;
+  }
+
   public boolean isNul() {
     return this == NUL || x == 0 && y == 0;
   }
@@ -74,6 +84,19 @@ public class Vector2f {
     return new Vector2f(Math.abs(this.x), Math.abs(this.y));
   }
 
+  public float length() {
+    float x = this.x, y = this.y;
+    return (float) Math.sqrt(x * x + y * y);
+  }
+
+  public Vector2f normalize() {
+    float length = this.length();
+    return new Vector2f(this.x / length, this.y / length);
+  }
+
+  public boolean isInAABB(Vector2f min, Vector2f max) {
+    return this.x >= min.x && this.x <= max.x && this.y >= min.y && this.y <= max.y;
+  }
 
   public boolean inRange(Vector2f min, Vector2f max) {
     return this.x >= min.x && this.y >= min.y && this.x <= max.x && this.y <= max.y;
