@@ -3,11 +3,11 @@ package net.dd.project1.client.game.controller;
 import lombok.val;
 import net.dd.project1.client.game.Game;
 import net.dd.project1.client.game.world.WorldObject;
-import net.dd.project1.client.game.world.WorldPlayer;
+import net.dd.project1.client.game.world.entity.Player;
 
 import java.util.List;
 
-public class SinglePlayerController extends WorldPlayer {
+public class SinglePlayerController extends Player {
 
   private final Game game;
 

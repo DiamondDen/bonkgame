@@ -4,8 +4,8 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.dd.project1.client.game.Game;
 import net.dd.project1.client.game.network.client.NetworkManager;
-import net.dd.project1.client.game.world.WorldPlayer;
-import net.dd.project1.client.game.world.WorldRemotePlayer;
+import net.dd.project1.client.game.world.entity.Player;
+import net.dd.project1.client.game.world.entity.WorldRemotePlayer;
 import net.dd.project1.shared.network.handler.PlayPacketHandler;
 import net.dd.project1.shared.network.packets.JoinPacket;
 import net.dd.project1.shared.network.packets.MovePacket;
@@ -38,7 +38,7 @@ public class ClientPlayListener extends PlayPacketHandler {
 
   @Override
   public void handleQuit(QuitPacket quitPacket) {
-    WorldPlayer worldPlayer = this.playersMap.remove(quitPacket.getId());
+    Player worldPlayer = this.playersMap.remove(quitPacket.getId());
     if (worldPlayer != null) {
       worldPlayer.kill();
     }

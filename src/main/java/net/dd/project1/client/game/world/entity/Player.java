@@ -1,20 +1,21 @@
-package net.dd.project1.client.game.world;
+package net.dd.project1.client.game.world.entity;
 
 import net.dd.project1.client.display.DrawColor;
 import net.dd.project1.client.display.DrawHelper;
+import net.dd.project1.client.game.world.WorldObject;
 import net.dd.project1.client.game.world.type.OvalObject;
 import net.dd.project1.client.game.math.Vector2f;
 
 import java.util.List;
 
-public class WorldPlayer extends WorldObject implements OvalObject {
+public class Player extends WorldObject implements OvalObject {
 
   public Vector2f motion = new Vector2f();
   private boolean onGround;
 
   private boolean alive = true;
 
-  public WorldPlayer(int x, int y, int size) {
+  public Player(int x, int y, int size) {
     super(x, y, size, size);
   }
 

@@ -1,10 +1,11 @@
-package net.dd.project1.client.game.world;
+package net.dd.project1.client.game.world.entity;
 
 import net.dd.project1.client.game.math.Vector2f;
+import net.dd.project1.client.game.world.WorldObject;
 
 import java.util.List;
 
-public class WorldRemotePlayer extends WorldPlayer {
+public class WorldRemotePlayer extends Player {
 
   public static final boolean INTERPOLATION = true;
 

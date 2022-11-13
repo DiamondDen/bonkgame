@@ -18,19 +18,14 @@ public class SinglePlayGame extends Game {
   }
 
   public void addWorldObjects() {
-    this.worldObjectList.add(new WorldObject(0, this.gameDisplay.getHeight() - 20, this.gameDisplay.getWidth(), 20));
+    this.worldObjectList.add(new WorldObject(0, this.gameDisplay.getHeight() - 20, this.gameDisplay.getWidth() * 5, 20));
     this.worldObjectList.add(new WorldObject(0, 0, 20, this.gameDisplay.getHeight()));
-    this.worldObjectList.add(new WorldObject(this.gameDisplay.getWidth() - 20, 0, 20, this.gameDisplay.getHeight()));
+   // this.worldObjectList.add(new WorldObject(this.gameDisplay.getWidth() - 20, 0, 20, this.gameDisplay.getHeight()));
     this.worldObjectList.add(new WorldObject(0, 0, this.gameDisplay.getWidth(), 20));
 
-    for (int i = 0; i < 5; i += 2) {
+    for (int i = 0; i < 10; i ++) {
       int x = 20 + i * 100;
       int y = this.gameDisplay.getHeight() - 50 - i * 25;
-      this.worldObjectList.add(new WorldObject(x, y, 90, 15));
-    }
-    for (int i = 0; i < 5; i += 2) {
-      int x = 20 + 510 - i * 100;
-      int y = this.gameDisplay.getHeight() - 50 - (6 + i) * 25;
       this.worldObjectList.add(new WorldObject(x, y, 90, 15));
     }
   }
